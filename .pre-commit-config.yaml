@@ -1,0 +1,68 @@
+default_language_version:
+  python: python3.8
+fail_fast: true
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v2.5.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-yaml
+      - id: check-ast
+      - id: check-case-conflict
+        stages: [push]
+  - repo: local
+    hooks:
+      - id: isort
+        name: isort
+        stages: [commit]
+        language: system
+        entry: pipenv run isort
+        types: [python]
+
+      - id: black
+        name: black
+        stages: [commit]
+        language: system
+        entry: pipenv run black
+        types: [python]
+
+      - id: flake8
+        name: flake8
+        stages: [commit]
+        language: system
+        entry: pipenv run flake8
+        types: [python]
+        exclude: setup.py
+
+      - id: mypy
+        name: mypy
+        stages: [commit]
+        language: system
+        entry: pipenv run mypy
+        types: [python]
+        pass_filenames: false
+      
+      - id: pytype
+        name: pytype
+        stages: [push]
+        language: system
+        entry: pipenv run pytype
+        types: [python]
+        pass_filenames: false
+        args: [-j, auto]
+
+      - id: pymarkdown
+        name: pymarkdown
+        stages: [commit]
+        language: system
+        entry: pipenv run pymarkdown
+        args: [--config, pymarkdown.cfg, scan, README.md]
+        pass_filenames: false
+
+      - id: pytest-cov
+        name: pytest-cov
+        stages: [push]
+        language: system
+        entry: pipenv run pytest --cov --cov-fail-under=100
+        types: [python]
+        pass_filenames: false
