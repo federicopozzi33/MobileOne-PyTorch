@@ -1,7 +1,7 @@
 # MobileOne PyTorch
 
 Unofficial PyTorch implementation of
-[**An Improved One millisecondMobile Backbone**](https://arxiv.org/pdf/2206.04040.pdf) paper.
+[**An Improved One millisecond Mobile Backbone**](https://arxiv.org/pdf/2206.04040.pdf) paper.
 
 ## Quickstart
 
@@ -113,5 +113,5 @@ torch.testing.assert_close(out1, out2)
 
 ### Contributing
 
-If you find a bug, create a GitHub issue, or even better, submit a pull request.
+If you find a bug, create a GitHub issue.
 Similarly, if you have questions, simply post them as GitHub issues.
