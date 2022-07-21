@@ -25,6 +25,7 @@ class MobileOneConfiguration:
     out_channels: List[int]
     strides: List[int]
     ks: List[int]
+    in_channel: int
     num_classes: int
 
 
@@ -74,7 +75,7 @@ _NETWORK_CONFIGS: NetworkConfigs = {
 }
 
 
-def get_params(size: MobileOneSize, num_classes: int) -> MobileOneConfiguration:
+def get_params(size: MobileOneSize, in_channel: int, num_classes: int) -> MobileOneConfiguration:
     conf = _NETWORK_CONFIGS[size]
 
     out_channels = [
@@ -90,6 +91,7 @@ def get_params(size: MobileOneSize, num_classes: int) -> MobileOneConfiguration:
         out_channels=out_channels,
         strides=_BASE_CONFIG.strides,
         ks=conf.ks,
+        in_channel=in_channel,
         num_classes=num_classes,
     )
 
@@ -106,6 +108,7 @@ class MobileOneNetwork(ReparametrizableModule):
         out_channels: List[int],
         num_blocks: List[int],
         strides: List[int],
+        in_channel: int = 3,
         num_classes: int = 1000,
     ):
         super().__init__()
@@ -117,7 +120,7 @@ class MobileOneNetwork(ReparametrizableModule):
                         _compose_stage(
                             num_blocks=num_blocks[i],
                             k=ks[i],
-                            in_channels=3 if i == 0 else out_channels[i - 1],
+                            in_channels=in_channel if i == 0 else out_channels[i - 1],
                             out_channels=out_channels[i],
                             stride=strides[i],
                         ),
