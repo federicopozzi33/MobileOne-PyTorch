@@ -161,6 +161,7 @@ def _compose_stage(
     in_channels: int,
     out_channels: int,
     stride: int,
+    activate: str = 'relu'
 ) -> ReparametrizableSequential:
     return ReparametrizableSequential(
         *[
@@ -169,6 +170,7 @@ def _compose_stage(
                 in_channels=in_channels if i == 0 else out_channels,
                 out_channels=out_channels,
                 stride=stride if i == 0 else 1,
+                activate = activate
             )
             for i in range(num_blocks)
         ]

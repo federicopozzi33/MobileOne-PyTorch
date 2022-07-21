@@ -26,6 +26,7 @@ class MobileOneBlock(ReparametrizableModule):
         in_channels: int,
         out_channels: int,
         stride: int = 1,
+        activate: str = "relu"
     ):
         super().__init__()
         self._mobileone_block_up = MobileOneBlockUp(
@@ -36,6 +37,7 @@ class MobileOneBlock(ReparametrizableModule):
         self._mobileone_block_down = MobileOneBlockDown(
             k=k, in_channels=in_channels, out_channels=out_channels
         )
+        self.activate = nn.Sigmoid() if activate == "sigmoid" else nn.ReLU()
 
     @property
     def num_blocks(self) -> int:
@@ -45,7 +47,7 @@ class MobileOneBlock(ReparametrizableModule):
         x = self._mobileone_block_up(x)
         x = F.relu(x)
         x = self._mobileone_block_down(x)
-        x = F.relu(x)
+        x = self.activate(x)
 
         return x
 
@@ -59,7 +61,7 @@ class MobileOneBlock(ReparametrizableModule):
                     ("block_up", l1),
                     ("relu1", nn.ReLU()),
                     ("block_down", l2),
-                    ("relu2", nn.ReLU()),
+                    ("relu2", self.activate),
                 ]
             )
         )
